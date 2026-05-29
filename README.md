@@ -245,4 +245,4 @@ Gin Hook 验证：
 
 # License
 
-[MIT License](https://github.com/joanbabyfet/tg-openim/blob/main/LICENSE)
+[MIT License](https://github.com/joanbabyfet/live/blob/main/LICENSE)
