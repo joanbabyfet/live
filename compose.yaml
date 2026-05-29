@@ -1,0 +1,29 @@
+services:
+  mysql:
+    image: mysql:8.0
+    container_name: mysql8
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: live
+      MYSQL_USER: dbuser
+      MYSQL_PASSWORD: 123456
+    ports:
+      - "3306:3306"
+    volumes:
+      - ./data/mysql:/var/lib/mysql
+
+  srs:
+    image: ossrs/srs:5
+    container_name: srs
+    restart: unless-stopped
+    ports:
+      - "1935:1935"   # RTMP
+      - "1985:1985"   # HTTP API
+      - "8080:8080"   # HTTP-FLV/HLS
+    environment:
+      CANDIDATE: 127.0.0.1
+    volumes:
+    - ./srs.conf:/usr/local/srs/conf/srs.conf
+    command: >
+      ./objs/srs -c conf/srs.conf
