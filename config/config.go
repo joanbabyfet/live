@@ -7,7 +7,9 @@ import (
 )
 
 type Config struct {
-	Port         string
+	PushURL	string
+	PlayURL	string
+	Port        string
 }
 
 var App Config
@@ -17,6 +19,8 @@ func InitConfig() {
 	_ = godotenv.Load()
 
 	App = Config{
-		Port:         os.Getenv("PORT"),
+		PushURL:	os.Getenv("PushURL"),
+		PlayURL:	os.Getenv("PlayURL"),
+		Port:		os.Getenv("PORT"),
 	}
 }	

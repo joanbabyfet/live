@@ -15,20 +15,22 @@ func main() {
 
     // 初始化数据库
     config.InitDB()
+    // 初始化redis
+    config.InitRedis()
 
     // 创建 service 实例
-    liveService := service.NewLiveService()
+    RoomService := service.NewRoomService()
 
     // 创建 controller 实例
-    liveController := controller.NewLiveController(
-        liveService,
+    RoomController := controller.NewRoomController(
+        RoomService,
     )
     SRSController := controller.NewSRSController(
-        liveService,
+        RoomService,
     )
     // 路由初始化
     r := router.InitRouter(
-        liveController,
+        RoomController,
         SRSController,
     )
 

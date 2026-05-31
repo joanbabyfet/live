@@ -2,12 +2,13 @@ package router
 
 import (
 	"live/controller"
+	"live/middleware"
 
 	"github.com/gin-gonic/gin"
 )
 
 func InitRouter(
-    liveController *controller.LiveController,
+    RoomController *controller.RoomController,
     SRSController *controller.SRSController,
 ) *gin.Engine {
 
@@ -16,11 +17,16 @@ func InitRouter(
     // 静态资源
     r.Static("/static", "./static")
 
-    live := r.Group("/live")
+    api := r.Group("/api")
+
+    //模拟登录
+    api.Use(middleware.Auth())
     {
-        live.POST("/create", liveController.CreateRoom)
-        live.GET("/list", liveController.LiveList)
-        live.GET("/:room_id", liveController.LiveDetail)
+        api.POST("/room/create", RoomController.Add)
+        api.GET("/room/list", RoomController.Index)
+        api.GET("/room/:id", RoomController.Detail)
+        api.POST("/room/start", RoomController.StartLive)
+        api.POST("/room/stop", RoomController.StopLive)
     }
 
     hook := r.Group("/hooks")

@@ -9,13 +9,13 @@ import (
 )
 
 type SRSController struct {
-	LiveService *service.LiveService
+	RoomService *service.RoomService
 }
 
 //构造函数
-func NewSRSController(s *service.LiveService) *SRSController {
+func NewSRSController(s *service.RoomService) *SRSController {
 	return &SRSController{
-		LiveService: s,
+		RoomService: s,
 	}
 }
 
@@ -37,7 +37,7 @@ func (c *SRSController) OnPublish(ctx *gin.Context) {
     log.Printf("OnPublish req: %+v\n", req)
 
     // 推流鉴权
-    room, err := c.LiveService.GetRoomByStream(req.Stream)
+    room, err := c.RoomService.GetByStreamName(req.Stream)
     if err != nil {
         ctx.JSON(404, gin.H{
             "code": 404,
@@ -59,7 +59,7 @@ func (c *SRSController) OnPublish(ctx *gin.Context) {
 
     log.Println("直播开始:", req.Stream)
 
-    c.LiveService.UpdateLiveStatus(req.Stream, "live")
+    c.RoomService.UpdateStatus(req.Stream, 1)
 
     ctx.JSON(200, gin.H{
         "code": 0,
@@ -85,7 +85,7 @@ func (c *SRSController) OnUnPublish(ctx *gin.Context) {
 
     log.Println("直播结束:", req.Stream)
 
-    c.LiveService.UpdateLiveStatus(req.Stream, "offline")
+    c.RoomService.UpdateStatus(req.Stream, 0)
 
     ctx.JSON(200, gin.H{
         "code": 0,
